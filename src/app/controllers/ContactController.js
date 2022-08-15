@@ -34,9 +34,29 @@ class ContactController {
 
   /**
    * Criar um novo registro
+   * @param {Request} req
+   * @param {Response} res
    */
-  store() {
+  async store(req, res) {
+    const {
+      name, email, phone, category_id,
+    } = req.body;
 
+    if (!name) {
+      return res.status(400).json({ error: 'Property name is missing' });
+    }
+
+    const contactExists = await ContactRepository.findByEmail(email);
+
+    if (contactExists) {
+      return res.status(400).json({ error: 'This e-mail is already been taken' });
+    }
+
+    const contact = await ContactRepository.create({
+      name, email, phone, category_id,
+    });
+
+    return res.status(200).json(contact);
   }
 
   /**
