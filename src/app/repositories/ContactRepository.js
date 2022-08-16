@@ -77,6 +77,26 @@ class ContactRepository {
     contacts.push(newContact);
     return Promise.resolve(newContact);
   }
+
+  /**
+   *
+   * @param {string} id
+   * @param {Omit<Contact, "id">} contact
+   * @returns {Contact}
+   */
+  update(id, {
+    name, email, phone, category_id,
+  }) {
+    const updatedContact = {
+      id, name, email, phone, category_id,
+    };
+
+    contacts = contacts.map((contact) => (
+      contact.id === id ? updatedContact : contact
+    ));
+
+    return Promise.resolve(updatedContact);
+  }
 }
 
 module.exports = new ContactRepository();
