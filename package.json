@@ -2,12 +2,15 @@
   "name": "mycontacts",
   "version": "1.0.0",
   "description": "API to store contacts",
-  "main": "index.js",
+  "main": "src/server.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "express-async-errors": "^3.1.1",
     "pg": "^8.7.3",
