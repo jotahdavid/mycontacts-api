@@ -27,12 +27,12 @@ class ContactController {
   async show(req, res) {
     const { id } = req.params;
     if (!validateUUID(id)) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Contact not found' });
     }
 
     const contact = await ContactRepository.findById(id);
     if (!contact) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Contact not found' });
     }
 
     return res.status(200).json(contact);
@@ -75,12 +75,12 @@ class ContactController {
       name, email, phone, category_id,
     } = req.body;
     if (!validateUUID(id)) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Contact not found' });
     }
 
     const contactExistsById = await ContactRepository.findById(id);
     if (!contactExistsById) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Contact not found' });
     }
 
     const contactExistsByEmail = await ContactRepository.findByEmail(email);
@@ -107,12 +107,12 @@ class ContactController {
   async delete(req, res) {
     const { id } = req.params;
     if (!validateUUID(id)) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Contact not found' });
     }
 
     const contact = await ContactRepository.findById(id);
     if (!contact) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Contact not found' });
     }
 
     await ContactRepository.delete(id);
