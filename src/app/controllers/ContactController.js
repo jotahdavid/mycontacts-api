@@ -47,18 +47,26 @@ class ContactController {
     const {
       name, email, phone, category_id,
     } = req.body;
+    if (category_id && !validateUUID(category_id)) {
+      return res.status(400).json({ error: 'Invalid category id' });
+    }
 
     if (!name) {
       return res.status(400).json({ error: 'Property name is missing' });
     }
 
-    const contactExists = await ContactRepository.findByEmail(email);
-    if (contactExists) {
-      return res.status(400).json({ error: 'This e-mail is already in use' });
+    if (email) {
+      const contactExists = await ContactRepository.findByEmail(email);
+      if (contactExists) {
+        return res.status(400).json({ error: 'This e-mail is already in use' });
+      }
     }
 
     const contact = await ContactRepository.create({
-      name, email, phone, category_id,
+      name,
+      email: email || null,
+      phone: phone || null,
+      category_id: category_id || null,
     });
 
     return res.status(201).json(contact);
@@ -78,21 +86,27 @@ class ContactController {
       return res.status(404).json({ error: 'Contact not found' });
     }
 
+    if (category_id && !validateUUID(category_id)) {
+      return res.status(400).json({ error: 'Invalid category id' });
+    }
+
     const contactExistsById = await ContactRepository.findById(id);
     if (!contactExistsById) {
       return res.status(404).json({ error: 'Contact not found' });
     }
 
-    const contactExistsByEmail = await ContactRepository.findByEmail(email);
-    if (contactExistsByEmail && contactExistsByEmail.id !== id) {
-      return res.status(400).json({ error: 'This e-mail is already in use' });
+    if (email) {
+      const contactExistsByEmail = await ContactRepository.findByEmail(email);
+      if (contactExistsByEmail && contactExistsByEmail.id !== id) {
+        return res.status(400).json({ error: 'This e-mail is already in use' });
+      }
     }
 
     const updatedContact = {
-      name: name ?? contactExistsById.name,
-      email: email ?? contactExistsById.email,
-      phone: phone ?? contactExistsById.phone,
-      category_id: category_id ?? contactExistsById.category_id,
+      name,
+      email: email || null,
+      phone: phone || null,
+      category_id: category_id || null,
     };
     const contact = await ContactRepository.update(id, updatedContact);
 
