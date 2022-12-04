@@ -1,12 +1,13 @@
+require('dotenv').config();
 const { Client } = require('pg');
 
-const client = new Client({
-  host: 'localhost',
-  port: 5432,
-  user: 'root',
-  password: 'root',
-  database: 'mycontacts',
-});
+const { DB_URL } = process.env;
+
+if (!DB_URL) {
+  throw new Error('Database URL was not provided!');
+}
+
+const client = new Client(DB_URL);
 
 client.connect();
 
